@@ -96,9 +96,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AutoReservationsEntities.edmx</DependentUpon>
     </Compile>
-    <Compile Include="ComplexType1.cs">
-      <DependentUpon>AutoReservationsEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Kunde.cs">
       <DependentUpon>AutoReservationsEntities.tt</DependentUpon>
     </Compile>

@@ -157,9 +157,6 @@
         </EntityType>
         <EntityType Name="MittelklasseAuto" BaseType="AutoReservationModel.Auto" />
         <EntityType Name="StandardAuto" BaseType="AutoReservationModel.Auto" />
-        <ComplexType Name="ComplexType1">
-          <Property Type="Int32" Name="Basistarif" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
