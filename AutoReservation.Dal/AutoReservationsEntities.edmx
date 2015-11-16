@@ -86,9 +86,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" />
           <Property Name="Marke" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" ConcurrencyMode="Fixed" />
-          <Property Name="AutoKlasse" Type="Int32" Nullable="false" ConcurrencyMode="Fixed" />
           <Property Name="Tagestarif" Type="Int32" Nullable="false" ConcurrencyMode="Fixed" />
-          <Property Name="Basistarif" Type="Int32" />
           <NavigationProperty Name="Reservations" Relationship="Self.FK_Reservation_Auto" FromRole="Auto" ToRole="Reservation" />
         </EntityType>
         <EntityType Name="Kunde">
@@ -154,6 +152,14 @@
             <End Role="Reservation" EntitySet="Reservationen" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="LuxusklasseAuto" BaseType="AutoReservationModel.Auto" >
+          <Property Name="Basistarif" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MittelklasseAuto" BaseType="AutoReservationModel.Auto" />
+        <EntityType Name="StandardAuto" BaseType="AutoReservationModel.Auto" />
+        <ComplexType Name="ComplexType1">
+          <Property Type="Int32" Name="Basistarif" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -161,13 +167,11 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AutoReservationModelStoreContainer" CdmEntityContainer="AutoReservationEntities">
           <EntitySetMapping Name="Autos">
-            <EntityTypeMapping TypeName="AutoReservationModel.Auto">
+            <EntityTypeMapping TypeName="IsTypeOf(AutoReservationModel.Auto)">
               <MappingFragment StoreEntitySet="Auto">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Marke" ColumnName="Marke" />
-                <ScalarProperty Name="AutoKlasse" ColumnName="AutoKlasse" />
                 <ScalarProperty Name="Tagestarif" ColumnName="Tagestarif" />
-                <ScalarProperty Name="Basistarif" ColumnName="Basistarif" />
+                <ScalarProperty Name="Marke" ColumnName="Marke" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
