@@ -1,4 +1,5 @@
-﻿using AutoReservation.TestEnvironment;
+﻿using AutoReservation.Dal;
+using AutoReservation.TestEnvironment;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AutoReservation.BusinessLayer.Testing
@@ -29,19 +30,34 @@ namespace AutoReservation.BusinessLayer.Testing
         [TestMethod]
         public void Test_UpdateAuto()
         {
-            Assert.Inconclusive("Test not implemented.");
+            string neueMarke = "Peugeot 207";
+            Auto auto = Target.GetAuto(1);
+            auto.Marke = neueMarke;
+
+            Target.UpdateAuto(auto, Target.GetAuto(1));
+            Assert.AreEqual(neueMarke, Target.GetAuto(1).Marke);
         }
 
         [TestMethod]
         public void Test_UpdateKunde()
         {
-            Assert.Inconclusive("Test not implemented.");
+            string neuerName = "Tester";
+            Kunde kunde = Target.GetKunde(1);
+            kunde.Nachname = neuerName;
+
+            Target.UpdateKunde(kunde, Target.GetKunde(1));
+            Assert.AreEqual(neuerName, Target.GetKunde(1).Nachname);
         }
 
         [TestMethod]
         public void Test_UpdateReservation()
         {
-            Assert.Inconclusive("Test not implemented.");
+            Kunde neuerKunde = Target.GetKunde(2);
+            Reservation reservation = Target.GetReservation(1);
+            reservation.Kunde = neuerKunde;
+
+            Target.UpdateReservation(reservation, Target.GetReservation(1));
+            Assert.AreEqual(neuerKunde, Target.GetReservation(1).Kunde);
         }
     }
 }
