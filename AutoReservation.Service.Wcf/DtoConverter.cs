@@ -103,7 +103,7 @@ namespace AutoReservation.Service.Wcf
 
             Reservation reservation = new Reservation
             {
-                ReservationNr = dto.ReservationNr,
+                ReservationsNr = dto.ReservationNr,
                 Von = dto.Von,
                 Bis = dto.Bis,
                 AutoId = dto.Auto.Id,
@@ -118,7 +118,7 @@ namespace AutoReservation.Service.Wcf
 
             return new ReservationDto
             {
-                ReservationNr = reservation.ReservationNr,
+                ReservationNr = reservation.ReservationsNr,
                 Von = reservation.Von,
                 Bis = reservation.Bis,
                 Auto = ConvertToDto(reservation.Auto),
