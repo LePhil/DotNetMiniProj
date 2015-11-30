@@ -18,16 +18,16 @@ namespace AutoReservation.Service.Wcf
             busService = new AutoReservationBusinessComponent();
         }
 
-        public void AddAuto(AutoDto autoDto)
+        public int AddAuto(AutoDto autoDto)
         {
             WriteActualMethod();
-            busService.AddAuto(DtoConverter.ConvertToEntity(autoDto));
+            return busService.AddAuto(DtoConverter.ConvertToEntity(autoDto));
         }
 
-        public void AddKunde(KundeDto kundeDto)
+        public int AddKunde(KundeDto kundeDto)
         {
             WriteActualMethod();
-            busService.AddKunde(DtoConverter.ConvertToEntity(kundeDto));
+            return busService.AddKunde(DtoConverter.ConvertToEntity(kundeDto));
         }
 
         public void AddReservation(ReservationDto reservationDto)

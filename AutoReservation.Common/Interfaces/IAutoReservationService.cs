@@ -14,7 +14,7 @@ namespace AutoReservation.Common.Interfaces
         AutoDto GetAuto(int id);
 
         [OperationContract]
-        void AddAuto(AutoDto auto);
+        int AddAuto(AutoDto auto);
 
         [OperationContract]
         void DeleteAuto(AutoDto auto);
@@ -46,7 +46,7 @@ namespace AutoReservation.Common.Interfaces
         KundeDto GetKunde(int id);
 
         [OperationContract]
-        void AddKunde(KundeDto kunde);
+        int AddKunde(KundeDto kunde);
 
         [OperationContract]
         void DeleteKunde(KundeDto kunde);

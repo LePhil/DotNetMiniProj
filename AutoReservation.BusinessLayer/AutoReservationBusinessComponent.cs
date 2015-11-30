@@ -30,9 +30,10 @@ namespace AutoReservation.BusinessLayer
             return context.Autos.Find(id);
         }
 
-        public void AddAuto(Auto auto) {
+        public int AddAuto(Auto auto) {
             context.Autos.Add(auto);
             context.SaveChanges();
+            return auto.Id;
         }
 
         public void DeleteAuto(Auto auto)
@@ -101,10 +102,11 @@ namespace AutoReservation.BusinessLayer
             return context.Kunden.Find(id);
         }
 
-        public void AddKunde(Kunde kunde)
+        public int AddKunde(Kunde kunde)
         {
             context.Kunden.Add(kunde);
             context.SaveChanges();
+            return kunde.Id;
         }
 
         public void DeleteKunde(Kunde kunde)

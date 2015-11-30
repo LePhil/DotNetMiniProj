@@ -19,6 +19,5 @@ namespace AutoReservation.Service.Wcf.Testing
                 return target;
             }
         }
-
     }
 }
