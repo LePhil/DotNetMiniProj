@@ -161,7 +161,22 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_UpdateReservation()
         {
-            Assert.Inconclusive("Test not implemented.");
+            Assert.IsTrue(Target.GetReservations().Count > 0);
+
+            ReservationDto resOrig = Target.GetReservations()[0];
+            Assert.IsNotNull(resOrig);
+
+            ReservationDto resNew = resOrig.Clone();
+            resNew.Bis.AddHours(2);
+
+            Target.UpdateReservation(resNew, resOrig);
+            ReservationDto check = Target.GetReservation(resOrig.ReservationNr);
+
+            Assert.AreEqual(resNew.ReservationNr, check.ReservationNr);
+            Assert.AreEqual(resNew.Kunde.Id, check.Kunde.Id);
+            Assert.AreEqual(resNew.Von, check.Von);
+            Assert.AreEqual(resNew.Bis, check.Bis);
+            Assert.AreEqual(resNew.Auto.Id, check.Auto.Id);
         }
 
         [TestMethod]
