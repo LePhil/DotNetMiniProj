@@ -143,19 +143,100 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_InsertReservation()
         {
-            Assert.Inconclusive("Test not implemented.");
+            ReservationDto res = new ReservationDto{
+                Auto = Target.GetAutos()[0],
+                Kunde = Target.GetKunden()[0],
+                Von = DateTime.Today,
+                Bis = DateTime.Today.AddDays(2)
+            };
+            int id = Target.AddReservation(res);
+
+            Assert.AreNotEqual(0, id);
+
+            ReservationDto toTest = Target.GetReservation(id);
+
+            Assert.IsNotNull(toTest);
+            Assert.AreNotEqual(0, toTest.ReservationNr);
+            Assert.AreEqual(id, toTest.ReservationNr);
+            Assert.AreEqual(res.Auto.Id, toTest.Auto.Id);
+            Assert.AreEqual(res.Kunde.Id, toTest.Kunde.Id);
+            Assert.AreEqual(res.Von, toTest.Von);
+            Assert.AreEqual(res.Bis, toTest.Bis);
+
+            
         }
 
         [TestMethod]
         public void Test_UpdateAuto()
         {
-            Assert.Inconclusive("Test not implemented.");
+            AutoDto newCar = new AutoDto {
+                Marke = "Smart",
+                Tagestarif = 22,
+                AutoKlasse = AutoKlasse.Standard
+            };
+            int id = Target.AddAuto( newCar );
+
+            AutoDto original = Target.GetAuto( id );
+            AutoDto updated = Target.GetAuto( id );
+
+            Assert.IsNotNull(original);
+            Assert.IsNotNull(updated);
+
+            updated.AutoKlasse = AutoKlasse.Luxusklasse;
+            updated.Basistarif = 999;
+            updated.Marke = "Bugatti Veyron oder so";
+
+            Target.UpdateAuto(updated, original);
+
+            AutoDto toTest = Target.GetAuto(id);
+
+            Assert.IsNotNull(toTest);
+
+            Assert.AreEqual(updated.Id, toTest.Id);
+            Assert.AreEqual(updated.Marke, toTest.Marke);
+            Assert.AreEqual(updated.Basistarif, toTest.Basistarif);
+            Assert.AreEqual(updated.AutoKlasse, toTest.AutoKlasse);
+
+            Assert.AreEqual(original.Id, toTest.Id);
+            Assert.AreNotEqual(original.Marke, toTest.Marke);
+            Assert.AreNotEqual(original.Basistarif, toTest.Basistarif);
+            Assert.AreNotEqual(original.AutoKlasse, toTest.AutoKlasse);
         }
 
         [TestMethod]
         public void Test_UpdateKunde()
         {
-            Assert.Inconclusive("Test not implemented.");
+            KundeDto newKunde = new KundeDto
+            {
+                Geburtsdatum = new DateTime(1990, 1, 1),
+                Nachname = "Takahashi",
+                Vorname = "Akira"
+
+            };
+            int id = Target.AddKunde(newKunde);
+
+            KundeDto original = Target.GetKunde(id);
+            KundeDto updated = Target.GetKunde(id);
+
+            updated.Geburtsdatum = new DateTime(2000,2,2);
+            updated.Nachname = "Rösli";
+            updated.Vorname = "Heidi";
+
+            Target.UpdateKunde(updated, original);
+
+            KundeDto toTest = Target.GetKunde(id);
+
+            Assert.IsNotNull(toTest);
+
+            Assert.AreEqual(updated.Id, toTest.Id);
+            Assert.AreEqual(updated.Geburtsdatum, toTest.Geburtsdatum);
+            Assert.AreEqual(updated.Nachname, toTest.Nachname);
+            Assert.AreEqual(updated.Vorname, toTest.Vorname);
+
+            Assert.AreEqual(original.Id, toTest.Id);
+            Assert.AreNotEqual(original.Geburtsdatum, toTest.Geburtsdatum);
+            Assert.AreNotEqual(original.Nachname, toTest.Nachname);
+            Assert.AreNotEqual(original.Vorname, toTest.Vorname);
         }
 
         [TestMethod]
@@ -183,21 +264,72 @@ namespace AutoReservation.Service.Wcf.Testing
         [ExpectedException(typeof(FaultException<AutoDto>))]
         public void Test_UpdateAutoWithOptimisticConcurrency()
         {
-            Assert.Inconclusive("Test not implemented.");
+            AutoDto original = Target.GetAutos()[0];
+            AutoDto clone1 = original.Clone();
+            AutoDto clone2 = original.Clone();
+
+            clone1.Tagestarif = 999;
+            clone2.Tagestarif = 111;
+
+            Target.UpdateAuto(clone1, original);
+
+            try
+            {
+                Target.UpdateAuto(clone2, original);
+            }
+            catch (FaultException<AutoDto> fe)
+            {
+                Assert.AreEqual(fe.Detail.Tagestarif, clone1.Tagestarif);
+                throw;
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FaultException<KundeDto>))]
         public void Test_UpdateKundeWithOptimisticConcurrency()
         {
-            Assert.Inconclusive("Test not implemented.");
+            KundeDto original = Target.GetKunden()[0];
+            KundeDto clone1 = original.Clone();
+            KundeDto clone2 = original.Clone();
+
+            clone1.Nachname = "Robert";
+            clone2.Nachname = "Hürlimann";
+
+            Target.UpdateKunde(clone1, original);
+
+            try
+            {
+                Target.UpdateKunde(clone2, original);
+            }
+            catch (FaultException<KundeDto> fe)
+            {
+                Assert.AreEqual(fe.Detail.Nachname, clone1.Nachname);
+                throw;
+            }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FaultException<ReservationDto>))]
         public void Test_UpdateReservationWithOptimisticConcurrency()
         {
-            Assert.Inconclusive("Test not implemented.");
+            ReservationDto original = Target.GetReservations()[0];
+            ReservationDto clone1 = original.Clone();
+            ReservationDto clone2 = original.Clone();
+
+            clone1.Bis = new DateTime(2222, 2, 2);
+            clone2.Bis = new DateTime(3333, 3, 3);
+
+            Target.UpdateReservation(clone1, original);
+
+            try
+            {
+                Target.UpdateReservation(clone2, original);
+            }
+            catch (FaultException<ReservationDto> fe)
+            {
+                Assert.AreEqual(fe.Detail.Bis, clone1.Bis);
+                throw;
+            }
         }
 
         [TestMethod]

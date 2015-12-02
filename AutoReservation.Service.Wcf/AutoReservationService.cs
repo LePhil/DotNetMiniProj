@@ -30,10 +30,10 @@ namespace AutoReservation.Service.Wcf
             return busService.AddKunde(DtoConverter.ConvertToEntity(kundeDto));
         }
 
-        public void AddReservation(ReservationDto reservationDto)
+        public int AddReservation(ReservationDto reservationDto)
         {
             WriteActualMethod();
-            busService.AddReservation(DtoConverter.ConvertToEntity(reservationDto));
+            return busService.AddReservation(DtoConverter.ConvertToEntity(reservationDto));
         }
 
         public void DeleteAuto(AutoDto autoDto)
