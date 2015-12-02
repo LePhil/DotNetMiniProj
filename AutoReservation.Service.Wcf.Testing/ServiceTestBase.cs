@@ -84,10 +84,10 @@ namespace AutoReservation.Service.Wcf.Testing
             Assert.IsNotNull(resByID);
 
             Assert.AreEqual(res.ReservationNr, resByID.ReservationNr);
-            Assert.AreEqual(res.Kunde, resByID.Kunde);
+            Assert.AreEqual(res.Kunde.Id, resByID.Kunde.Id);
             Assert.AreEqual(res.Von, resByID.Von);
             Assert.AreEqual(res.Bis, resByID.Bis);
-            Assert.AreEqual(res.Auto, resByID.Auto);
+            Assert.AreEqual(res.Auto.Id, resByID.Auto.Id);
         }
 
         [TestMethod]
