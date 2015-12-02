@@ -67,10 +67,11 @@ namespace AutoReservation.BusinessLayer
             return context.Reservationen.Find(id);
         }
 
-        public void AddReservation(Reservation reservation)
+        public int AddReservation(Reservation reservation)
         {
             context.Reservationen.Add(reservation);
             context.SaveChanges();
+            return reservation.ReservationsNr;
         }
 
         public void DeleteReservation(Reservation reservation)

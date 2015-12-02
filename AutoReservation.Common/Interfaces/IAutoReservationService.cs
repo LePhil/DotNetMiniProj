@@ -30,7 +30,7 @@ namespace AutoReservation.Common.Interfaces
         ReservationDto GetReservation(int id);
 
         [OperationContract]
-        void AddReservation(ReservationDto reservation);
+        int AddReservation(ReservationDto reservation);
 
         [OperationContract]
         void DeleteReservation(ReservationDto reservation);
