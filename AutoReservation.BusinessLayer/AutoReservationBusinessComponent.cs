@@ -90,6 +90,7 @@ namespace AutoReservation.BusinessLayer
 
         public int AddReservation(Reservation reservation)
         {
+            // TODO: use Include like above - also do that on all other failing tests' methods...
             using (AutoReservationEntities context = new AutoReservationEntities())
             {
                 context.Reservationen.Add(reservation);
