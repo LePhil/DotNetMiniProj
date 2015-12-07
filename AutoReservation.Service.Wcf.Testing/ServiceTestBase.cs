@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.Linq;
 
 namespace AutoReservation.Service.Wcf.Testing
 {
@@ -22,30 +23,32 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_GetAutos()
         {
-            IList<AutoDto> cars = Target.GetAutos();
-            Assert.AreEqual(3, cars.Count);
+            IEnumerable<AutoDto> cars = Target.GetAutos();
+            Assert.AreEqual(3, Enumerable.Count(cars) );
         }
 
         [TestMethod]
         public void Test_GetKunden()
         {
-            IList<KundeDto> customers = Target.GetKunden();
-            Assert.AreEqual(4, customers.Count);
+            IEnumerable<KundeDto> customers = Target.GetKunden();
+            Assert.AreEqual(4, Enumerable.Count(customers) );
         }
 
         [TestMethod]
         public void Test_GetReservationen()
         {
-            IList<ReservationDto> reservations = Target.GetReservations();
-            Assert.AreEqual(3, reservations.Count);
+            IEnumerable<ReservationDto> reservations = Target.GetReservations();
+            Assert.AreEqual(3, Enumerable.Count(reservations) );
         }
 
         [TestMethod]
         public void Test_GetAutoById()
         {
-            Assert.IsTrue(Target.GetAutos().Count > 0);
+            var cars = Target.GetAutos();
 
-            AutoDto car = Target.GetAutos()[0];
+            Assert.IsTrue(Enumerable.Count(cars) > 0);
+
+            AutoDto car = cars.First();
             Assert.IsNotNull(car);
             AutoDto carByID = Target.GetAuto(car.Id);
             Assert.IsNotNull(carByID);
@@ -60,9 +63,10 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_GetKundeById()
         {
-            Assert.IsTrue(Target.GetKunden().Count > 0);
+            var customers = Target.GetKunden();
+            Assert.IsTrue(Enumerable.Count(customers) > 0);
 
-            KundeDto cust = Target.GetKunden()[0];
+            KundeDto cust = customers.First();
             Assert.IsNotNull(cust);
             KundeDto custByID = Target.GetKunde(cust.Id);
             Assert.IsNotNull(custByID);
@@ -76,9 +80,10 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_GetReservationByNr()
         {
-            Assert.IsTrue(Target.GetReservations().Count > 0);
+            var reservations  = Target.GetReservations();
+            Assert.IsTrue(Enumerable.Count(reservations) > 0);
 
-            ReservationDto res = Target.GetReservations()[0];
+            ReservationDto res = reservations.First();
             Assert.IsNotNull(res);
             ReservationDto resByID = Target.GetReservation(res.ReservationNr);
             Assert.IsNotNull(resByID);
@@ -144,8 +149,8 @@ namespace AutoReservation.Service.Wcf.Testing
         public void Test_InsertReservation()
         {
             ReservationDto res = new ReservationDto{
-                Auto = Target.GetAutos()[0],
-                Kunde = Target.GetKunden()[0],
+                Auto = Target.GetAutos().First(),
+                Kunde = Target.GetKunden().First(),
                 Von = DateTime.Today,
                 Bis = DateTime.Today.AddDays(2)
             };
@@ -242,9 +247,9 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_UpdateReservation()
         {
-            Assert.IsTrue(Target.GetReservations().Count > 0);
+            Assert.IsTrue(Enumerable.Count(Target.GetReservations()) > 0);
 
-            ReservationDto resOrig = Target.GetReservations()[0];
+            ReservationDto resOrig = Target.GetReservations().First();
             Assert.IsNotNull(resOrig);
 
             ReservationDto resNew = resOrig.Clone();
@@ -264,7 +269,7 @@ namespace AutoReservation.Service.Wcf.Testing
         [ExpectedException(typeof(FaultException<AutoDto>))]
         public void Test_UpdateAutoWithOptimisticConcurrency()
         {
-            AutoDto original = Target.GetAutos()[0];
+            AutoDto original = Target.GetAutos().First();
             AutoDto clone1 = original.Clone();
             AutoDto clone2 = original.Clone();
 
@@ -288,7 +293,7 @@ namespace AutoReservation.Service.Wcf.Testing
         [ExpectedException(typeof(FaultException<KundeDto>))]
         public void Test_UpdateKundeWithOptimisticConcurrency()
         {
-            KundeDto original = Target.GetKunden()[0];
+            KundeDto original = Target.GetKunden().First();
             KundeDto clone1 = original.Clone();
             KundeDto clone2 = original.Clone();
 
@@ -312,7 +317,7 @@ namespace AutoReservation.Service.Wcf.Testing
         [ExpectedException(typeof(FaultException<ReservationDto>))]
         public void Test_UpdateReservationWithOptimisticConcurrency()
         {
-            ReservationDto original = Target.GetReservations()[0];
+            ReservationDto original = Target.GetReservations().First();
             ReservationDto clone1 = original.Clone();
             ReservationDto clone2 = original.Clone();
 
@@ -335,37 +340,37 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_DeleteKunde()
         {
-            Assert.AreEqual(4, Target.GetKunden().Count);
+            Assert.AreEqual(4, Enumerable.Count(Target.GetKunden()));
 
-            KundeDto toDelete = Target.GetKunden()[0];
+            KundeDto toDelete = Target.GetKunden().First();
             Target.DeleteKunde(toDelete);
 
             Assert.IsNull(Target.GetKunde(toDelete.Id));
-            Assert.AreEqual(3, Target.GetKunden().Count);
+            Assert.AreEqual(3, Enumerable.Count(Target.GetKunden()));
         }
 
         [TestMethod]
         public void Test_DeleteAuto()
         {
-            Assert.AreEqual(3, Target.GetAutos().Count);
+            Assert.AreEqual(3, Enumerable.Count( Target.GetAutos() ) );
 
-            AutoDto toDelete = Target.GetAutos()[0];
+            AutoDto toDelete = Target.GetAutos().First();
             Target.DeleteAuto(toDelete);
 
             Assert.IsNull(Target.GetAuto(toDelete.Id));
-            Assert.AreEqual(2, Target.GetAutos().Count);
+            Assert.AreEqual(2, Enumerable.Count(Target.GetAutos()));
         }
 
         [TestMethod]
         public void Test_DeleteReservation()
         {
-            Assert.AreEqual(3, Target.GetReservations().Count);
+            Assert.AreEqual(3, Enumerable.Count(Target.GetReservations()));
 
-            ReservationDto toDelete = Target.GetReservations()[0];
+            ReservationDto toDelete = Target.GetReservations().First();
             Target.DeleteReservation(toDelete);
 
             Assert.IsNull(Target.GetReservation(toDelete.ReservationNr));
-            Assert.AreEqual(2, Target.GetReservations().Count);
+            Assert.AreEqual(2, Enumerable.Count(Target.GetReservations()));
         }
     }
 }

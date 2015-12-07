@@ -60,7 +60,7 @@ namespace AutoReservation.Service.Wcf
             return DtoConverter.ConvertToDto(busService.GetAuto(id));
         }
 
-        public IList<AutoDto> GetAutos()
+        public IEnumerable<AutoDto> GetAutos()
         {
             WriteActualMethod();
             return DtoConverter.ConvertToDtos(busService.GetAutos());
@@ -72,7 +72,7 @@ namespace AutoReservation.Service.Wcf
             return DtoConverter.ConvertToDto(busService.GetKunde(id));
         }
 
-        public IList<KundeDto> GetKunden()
+        public IEnumerable<KundeDto> GetKunden()
         {
             WriteActualMethod();
             return DtoConverter.ConvertToDtos(busService.GetKunden());
@@ -84,7 +84,7 @@ namespace AutoReservation.Service.Wcf
             return DtoConverter.ConvertToDto(busService.GetReservation(id));
         }
 
-        public IList<ReservationDto> GetReservations()
+        public IEnumerable<ReservationDto> GetReservations()
         {
             WriteActualMethod();
             return DtoConverter.ConvertToDtos(busService.GetReservations());

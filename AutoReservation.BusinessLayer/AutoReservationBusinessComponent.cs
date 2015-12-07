@@ -1,5 +1,6 @@
 ﻿using AutoReservation.Dal;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 
@@ -7,12 +8,8 @@ namespace AutoReservation.BusinessLayer
 {
     public class AutoReservationBusinessComponent
     {
-        private AutoReservationEntities context;
 
-        public AutoReservationBusinessComponent() {
-            context = new AutoReservationEntities();
-        }
-
+        
         private static void HandleDbConcurrencyException<T>(AutoReservationEntities context, T original) where T : class
         {
             var databaseValue = context.Entry(original).GetDatabaseValues();
@@ -21,113 +18,164 @@ namespace AutoReservation.BusinessLayer
             throw new LocalOptimisticConcurrencyException<T>(string.Format("Update {0}: Concurrency-Fehler", typeof(T).Name), original);
         }
 
-        public IList<Auto> GetAutos() {
-            var autos = from a in context.Autos select a;
-            return autos.ToList();
+
+
+        public IEnumerable<Auto> GetAutos()
+        {
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                var autos = from a in context.Autos select a;
+                return autos.ToList();
+            }
         }
 
         public Auto GetAuto(int id) {
-            return context.Autos.Find(id);
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                return context.Autos.Find(id);
+            }
         }
 
         public int AddAuto(Auto auto) {
-            context.Autos.Add(auto);
-            context.SaveChanges();
-            return auto.Id;
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                context.Autos.Add(auto);
+                context.SaveChanges();
+                return auto.Id;
+            }
         }
 
         public void DeleteAuto(Auto auto)
         {
-            context.Autos.Attach(auto);
-            context.Autos.Remove(auto);
-            context.SaveChanges();
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                context.Autos.Attach(auto);
+                context.Autos.Remove(auto);
+                context.SaveChanges();
+            }
         }
 
         public void UpdateAuto(Auto modified, Auto original) {
-            try
+            using (AutoReservationEntities context = new AutoReservationEntities())
             {
-                context.Autos.Attach(original);
-                context.Entry(original).CurrentValues.SetValues(modified);
-                context.SaveChanges();
+                try
+                {
+                    context.Autos.Attach(original);
+                    context.Entry(original).CurrentValues.SetValues(modified);
+                    context.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    HandleDbConcurrencyException(context, original);
+                }
             }
-            catch (DbUpdateConcurrencyException) {
-                HandleDbConcurrencyException(context, original);
-            }
-            
         }
 
-        public IList<Reservation> GetReservations()
+        public IEnumerable<Reservation> GetReservations()
         {
-            var reservationen = from a in context.Reservationen select a;
-            return reservationen.ToList();
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                var reservationen = from a in context.Reservationen.Include(r=>r.Auto).Include(r=>r.Kunde) select a;
+                return reservationen.ToList();
+            }
         }
 
         public Reservation GetReservation(int id)
         {
-            return context.Reservationen.Find(id);
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                return context.Reservationen.Include(r => r.Auto).Include(r => r.Kunde).SingleOrDefault(r=> r.ReservationsNr == id);
+            }
         }
 
         public int AddReservation(Reservation reservation)
         {
-            context.Reservationen.Add(reservation);
-            context.SaveChanges();
-            return reservation.ReservationsNr;
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                context.Reservationen.Add(reservation);
+                context.SaveChanges();
+                return reservation.ReservationsNr;
+            }
         }
 
         public void DeleteReservation(Reservation reservation)
         {
-            context.Reservationen.Attach(reservation);
-            context.Reservationen.Remove(reservation);
-            context.SaveChanges();
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                context.Reservationen.Attach(reservation);
+                context.Reservationen.Remove(reservation);
+                context.SaveChanges();
+            }
         }
 
         public void UpdateReservation(Reservation modified, Reservation original)
         {
-            try { 
-                context.Reservationen.Attach(original);
-                context.Entry(original).CurrentValues.SetValues(modified);
-                context.SaveChanges();
-            } catch (DbUpdateConcurrencyException) {
-                HandleDbConcurrencyException(context, original);
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                try
+                {
+                    context.Reservationen.Attach(original);
+                    context.Entry(original).CurrentValues.SetValues(modified);
+                    context.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    HandleDbConcurrencyException(context, original);
+                }
             }
         }
 
-        public IList<Kunde> GetKunden()
+        public IEnumerable<Kunde> GetKunden()
         {
-            var reservationen = from a in context.Kunden select a;
-            return reservationen.ToList();
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                var reservationen = from a in context.Kunden select a;
+                return reservationen.ToList();
+            }
         }
 
         public Kunde GetKunde(int id)
         {
-            return context.Kunden.Find(id);
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                return context.Kunden.Find(id);
+            }
         }
 
         public int AddKunde(Kunde kunde)
         {
-            context.Kunden.Add(kunde);
-            context.SaveChanges();
-            return kunde.Id;
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                context.Kunden.Add(kunde);
+                context.SaveChanges();
+                return kunde.Id;
+            }
         }
 
         public void DeleteKunde(Kunde kunde)
         {
-            context.Kunden.Attach(kunde);
-            context.Kunden.Remove(kunde);
-            context.SaveChanges();
+            using (AutoReservationEntities context = new AutoReservationEntities())
+            {
+                context.Kunden.Attach(kunde);
+                context.Kunden.Remove(kunde);
+                context.SaveChanges();
+            }
         }
 
         public void UpdateKunde(Kunde modified, Kunde original)
         {
-            try
+            using (AutoReservationEntities context = new AutoReservationEntities())
             {
-                context.Kunden.Attach(original);
-                context.Entry(original).CurrentValues.SetValues(modified);
-                context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                HandleDbConcurrencyException(context, original);
+                try
+                {
+                    context.Kunden.Attach(original);
+                    context.Entry(original).CurrentValues.SetValues(modified);
+                    context.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    HandleDbConcurrencyException(context, original);
+                }
             }
         }
     }

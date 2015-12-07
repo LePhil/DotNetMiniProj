@@ -8,7 +8,7 @@ namespace AutoReservation.Common.Interfaces
     public interface IAutoReservationService
     {
         [OperationContract]
-        IList<AutoDto> GetAutos();
+        IEnumerable<AutoDto> GetAutos();
 
         [OperationContract]
         AutoDto GetAuto(int id);
@@ -24,7 +24,7 @@ namespace AutoReservation.Common.Interfaces
         void UpdateAuto(AutoDto modified, AutoDto original);
 
         [OperationContract]
-        IList<ReservationDto> GetReservations();
+        IEnumerable<ReservationDto> GetReservations();
 
         [OperationContract]
         ReservationDto GetReservation(int id);
@@ -40,7 +40,7 @@ namespace AutoReservation.Common.Interfaces
         void UpdateReservation(ReservationDto modified, ReservationDto original);
 
         [OperationContract]
-        IList<KundeDto> GetKunden();
+        IEnumerable<KundeDto> GetKunden();
 
         [OperationContract]
         KundeDto GetKunde(int id);
