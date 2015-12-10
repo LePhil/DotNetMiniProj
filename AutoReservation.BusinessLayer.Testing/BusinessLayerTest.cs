@@ -65,9 +65,6 @@ namespace AutoReservation.BusinessLayer.Testing
             Assert.AreEqual(updated.Bis, reservation.Bis);
             Assert.AreEqual(updated.KundeId, reservation.KundeId);
             Assert.AreEqual(updated.AutoId, reservation.AutoId);
-            
-            // TODO: wut.
-            //Assert.AreEqual(neuerKunde.Id, Target.GetReservation(1).Kunde.Id);
         }
     }
 }
