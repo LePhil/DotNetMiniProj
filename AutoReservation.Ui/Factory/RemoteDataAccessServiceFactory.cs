@@ -3,7 +3,7 @@ using System.ServiceModel;
 
 namespace AutoReservation.Ui.Factory
 {
-    public class RemoteDataAccessFactory: IServiceFactory
+    public class RemoteDataAccessServiceFactory: IServiceFactory
     {
         public IAutoReservationService GetService()
         {
