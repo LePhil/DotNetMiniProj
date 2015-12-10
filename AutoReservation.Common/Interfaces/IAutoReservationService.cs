@@ -4,7 +4,7 @@ using System.ServiceModel;
 
 namespace AutoReservation.Common.Interfaces
 {
-    [ServiceContract(Name = "Auto Reservation Service")]
+    [ServiceContract(Name = "AutoReservationService")]
     public interface IAutoReservationService
     {
         [OperationContract]

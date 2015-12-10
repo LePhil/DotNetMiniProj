@@ -3,6 +3,8 @@ using AutoReservation.Ui.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AutoReservation.Ui.Factory;
 using Ninject;
+using System.Windows.Input;
+using AutoReservation.Common.Interfaces;
 
 namespace AutoReservation.Ui.Testing
 {

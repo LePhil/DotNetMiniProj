@@ -174,39 +174,32 @@ namespace AutoReservation.Service.Wcf.Testing
         [TestMethod]
         public void Test_UpdateAuto()
         {
-            AutoDto newCar = new AutoDto {
-                Marke = "Smart",
-                Tagestarif = 22,
-                AutoKlasse = AutoKlasse.Standard
+            AutoDto newCar = new AutoDto
+            {
+                Marke = "Fiat Panda",
+                AutoKlasse = AutoKlasse.Luxusklasse,
+                Tagestarif = 222,
+                Basistarif = 321
             };
-            int id = Target.AddAuto( newCar );
 
-            AutoDto original = Target.GetAuto( id );
-            AutoDto updated = Target.GetAuto( id );
+            int id = Target.AddAuto(newCar);
 
-            Assert.IsNotNull(original);
-            Assert.IsNotNull(updated);
+            AutoDto original = Target.GetAuto(id);
+            AutoDto updated = Target.GetAuto(id);
 
-            //updated.AutoKlasse = AutoKlasse.Luxusklasse;
-            //updated.Basistarif = 999;
-            updated.Marke = "Bugatti Veyron oder so";
+            updated.Marke = "Peugeot 207";
+            updated.Tagestarif = 111;
+            updated.Basistarif = 123;
+
 
             Target.UpdateAuto(updated, original);
-            /*
-            AutoDto toTest = Target.GetAuto(id);
 
-            Assert.IsNotNull(toTest);
+            AutoDto toTest = Target.GetAuto(id);
 
             Assert.AreEqual(updated.Id, toTest.Id);
             Assert.AreEqual(updated.Marke, toTest.Marke);
+            Assert.AreEqual(updated.Tagestarif, toTest.Tagestarif);
             Assert.AreEqual(updated.Basistarif, toTest.Basistarif);
-            Assert.AreEqual(updated.AutoKlasse, toTest.AutoKlasse);
-
-            Assert.AreEqual(original.Id, toTest.Id);
-            Assert.AreNotEqual(original.Marke, toTest.Marke);
-            Assert.AreNotEqual(original.Basistarif, toTest.Basistarif);
-            Assert.AreNotEqual(original.AutoKlasse, toTest.AutoKlasse);
-            */
         }
 
         [TestMethod]
