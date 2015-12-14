@@ -21,7 +21,7 @@ namespace AutoReservation.Service.Wcf
         public int AddAuto(AutoDto autoDto)
         {
             WriteActualMethod();
-            return busService.AddAuto(DtoConverter.ConvertToEntity(autoDto));
+            return busService.AddAuto(autoDto.ConvertToEntity());// DtoConverter.ConvertToEntity(autoDto));
         }
 
         public int AddKunde(KundeDto kundeDto)
@@ -57,7 +57,8 @@ namespace AutoReservation.Service.Wcf
         public AutoDto GetAuto(int id)
         {
             WriteActualMethod();
-            return DtoConverter.ConvertToDto(busService.GetAuto(id));
+            return busService.GetAuto(id).ConvertToDto();
+            //return DtoConverter.ConvertToDto(busService.GetAuto(id));
         }
 
         public IEnumerable<AutoDto> GetAutos()

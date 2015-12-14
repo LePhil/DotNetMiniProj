@@ -29,7 +29,8 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        public Auto GetAuto(int id) {
+        public Auto GetAuto(int id) 
+        {
             using (AutoReservationEntities context = new AutoReservationEntities())
             {
                 return context.Autos.Find(id);
@@ -75,7 +76,8 @@ namespace AutoReservation.BusinessLayer
         {
             using (AutoReservationEntities context = new AutoReservationEntities())
             {
-                var reservationen = from a in context.Reservationen.Include(r=>r.Auto).Include(r=>r.Kunde) select a;
+                var reservationen = from a in context.Reservationen.Include(r=>r.Auto).Include(r=>r.Kunde)
+                                    select a;
                 return reservationen.ToList();
             }
         }
@@ -84,7 +86,10 @@ namespace AutoReservation.BusinessLayer
         {
             using (AutoReservationEntities context = new AutoReservationEntities())
             {
-                return context.Reservationen.Include(r => r.Auto).Include(r => r.Kunde).SingleOrDefault(r=> r.ReservationsNr == id);
+                return context.Reservationen
+                    .Include(r => r.Auto)
+                    .Include(r => r.Kunde)
+                    .SingleOrDefault(r=> r.ReservationsNr == id);
             }
         }
 
